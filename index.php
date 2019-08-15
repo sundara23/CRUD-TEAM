@@ -16,7 +16,6 @@
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
-    <?php include('koneksi.php'); ?>
 <div class="container">
     <h1 class="text-center">Data Mahasiswa</h1>
     <div class="row">
@@ -79,59 +78,7 @@
         </div>
         </div>
         <!-- end modal insert data -->
-        <!-- modal update data -->
-        <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateModalLabel">Update Data Mahasiswa</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="" method="post">
-            <div class="modal-body">
-                <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">Nim :</span>
-                </div>
-                <input type="number" class="form-control" name="nim" placeholder="No Induk Mahasiswa" required>
-                </div>
-                <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">Nama Mahasiswa :</span>
-                </div>
-                <input type="text" class="form-control" name="nama" placeholder="Nama Mahasiswa">
-                </div>
-                <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">Umur :</span>
-                </div>
-                <input type="number" class="form-control" name="umur" placeholder="Umur">
-                </div>
-                <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">No Telphone :</span>
-                </div>
-                <input type="number" class="form-control" name="no_telepon" placeholder="No Telephone">
-                </div>
-                <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Alamat</span>
-                </div>
-                <textarea class="form-control" name="alamat" aria-label="With textarea"></textarea>
-                </div>
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" name="btnsave"class="btn btn-primary" >Save</button>
-            </div>
-            </form>
-            </div>
-        </div>
-        </div>
-        <!-- end modal update data -->
+        
         <?php 
         include('crud.php');
         if (isset($_POST['btnsave'])) {
@@ -146,7 +93,7 @@
           <th scope="col">Umur</th>
           <th scope="col">No Telephone</th>
           <th scope="col">Alamat</th>
-          <!-- <th scope="col">Aksi</th> -->
+          <th scope="col">Aksi</th>
         </tr>
       </thead>
       <tbody>
@@ -159,16 +106,74 @@
                 <td><?= $row['umur']; ?></td>
                 <td><?= $row['no_telepon']; ?></td>
                 <td><?= $row['alamat']; ?></td>
-                <!-- <td><a href="#updateModal" data-toggle="modal" class="btn btn-success">Update</a></td> -->
-            </tr>
-        
-        <?php } ?>
-        
+                <td><a href="#updateModal<?= $row['nim']; ?>" data-toggle="modal" class="btn btn-success"> Update </a> <a href="crud.php?nim=<?= $row['nim']; ?>" class="btn btn-danger"> Delete </a></td>
+            </tr>  
+            <!-- modal update data -->
+    <?php
+    $viewUpdate = $crud->readUpdateData($row['nim']);
+    while($row = mysqli_fetch_assoc($viewUpdate)) {
+    ?>
+    <div class="modal fade" id="updateModal<?= $row['nim']; ?>" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">Update Data Mahasiswa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="crud.php" method="post">
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Nim :</span>
+                </div>
+                <input type="number" class="form-control" name="unim" value="<?= $row['nim']; ?>">
+                </div>
+                <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Nama Mahasiswa :</span>
+                </div>
+                <input type="text" class="form-control" name="unama" value="<?= $row['nama']; ?>">
+                </div>
+                <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Umur :</span>
+                </div>
+                <input type="number" class="form-control" name="uumur" value="<?= $row['umur']; ?>">
+                </div>
+                <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">No Telphone :</span>
+                </div>
+                <input type="number" class="form-control" name="uno_telepon" value="<?= $row['no_telepon']; ?>">
+                </div>
+                <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Alamat</span>
+                </div>
+                <textarea class="form-control" name="ualamat" value="<?= $row['alamat']; ?>" aria-label="With textarea"></textarea>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" name="btnupdate"class="btn btn-primary" >Save</button>
+            </div>
+            </form>
+            </div>
+        </div>
+        </div>
+        <?php } } ?>
+        <!-- end modal update data -->       
       </tbody>
     </table>
+    
   </div>
 </div>
+
   </div>
+
   <script>
     $(document).ready(function() {
     var t = $('#myTable').DataTable();
